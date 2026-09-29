@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const HomeAbout = () => {
-    return (
-        <div>
-            HomeAbout
-        </div>
-    );
+  return <div className="h-screen">HomeAbout</div>;
 };
 
 export default HomeAbout;

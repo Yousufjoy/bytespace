@@ -1,124 +1,354 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { signIn, getSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Star, BarChart2 } from "lucide-react";
 
-function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+export default function LoginPage() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect");
-  const verified = searchParams.get("verified");
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-
-      if (res?.error === "EMAIL_NOT_VERIFIED") {
-        setError("Your email is not verified. Please check your inbox.");
-      } else if (res?.error) {
-        setError("Invalid email or password.");
-      } else {
-        const session = await getSession();
-        const role = session?.user?.role;
-
-        if (redirectTo) router.push(redirectTo);
-        else if (role === "admin") router.push("/admin");
-        else router.push("/");
-      }
-    } catch {
-      setError("Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
+    console.log("Signing in:", formData);
   };
 
   return (
-    <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-      <h2 className="text-3xl font-bold text-center mb-2">Welcome Back</h2>
-      <p className="text-gray-500 text-center mb-6">Login to your account</p>
+    <div className="relative min-h-screen w-full bg-[#0b56fd] text-white overflow-hidden flex items-center justify-center p-6 sm:p-10 lg:p-16 selection:bg-[#c6f800] selection:text-black">
+      {/* 1. Subtle Background Grid Stripes */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-20 z-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, #ffffff 1px, transparent 1px),
+            linear-gradient(to bottom, #ffffff 1px, transparent 1px)
+          `,
+          backgroundSize: "64px 64px",
+        }}
+      />
 
-      {verified && (
-        <p className="text-green-600 text-sm text-center mb-4 bg-green-50 p-2 rounded">
-          Email verified successfully! Please login.
-        </p>
-      )}
+      {/* Main Container */}
+      <div className="relative z-10 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        {/* ========================================================================= */}
+        {/* LEFT COLUMN: Logo, Headline & Floating Collage                            */}
+        {/* ========================================================================= */}
+        <div className="lg:col-span-6 flex flex-col justify-between h-full pt-4">
+          {/* Logo & Headline */}
+          <div className="max-w-md mb-8">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 group mb-8"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[#c6f800] flex items-center justify-center font-black text-black text-lg shadow-sm">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5 text-black"
+                >
+                  <path d="M4 4h7a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H4V4zm7 8a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H4v-8h7z" />
+                </svg>
+              </div>
+            </Link>
 
-      <form onSubmit={handleLogin} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email address"
-          className="w-full p-3 border rounded-lg"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-3">
+              Sign in with ease
+            </h1>
+            <p className="text-blue-100/80 text-xs sm:text-sm leading-relaxed">
+              Experience a seamless and efficient sign-in process that grants
+              you instant access to a world of knowledge.
+            </p>
+          </div>
 
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className="w-full p-3 border rounded-lg"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3 text-gray-400"
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
+          {/* Floating Collage Graphic */}
+          <div className="relative w-full max-w-lg h-[380px] sm:h-[420px] hidden md:block">
+            {/* 3D Lime Torus (Top Left) */}
+            <div className="absolute left-6 top-0 w-16 h-16 rounded-full border-[10px] border-[#c6f800] rotate-45 shadow-lg z-20 pointer-events-none" />
+
+            {/* 3D Lime Pyramid (Bottom Left) */}
+            <div className="absolute left-0 bottom-2 w-20 h-20 pointer-events-none z-30">
+              <svg
+                viewBox="0 0 100 100"
+                fill="none"
+                className="w-full h-full text-[#c6f800] drop-shadow-xl"
+              >
+                <polygon points="50,10 90,85 10,85" fill="currentColor" />
+              </svg>
+            </div>
+
+            {/* Floating Card 1: Back Left (Build Digital Asset) */}
+            <div className="absolute left-2 top-8 w-64 bg-white text-zinc-900 rounded-3xl p-3 shadow-xl z-10 border border-gray-100 opacity-95">
+              <div className="relative w-full h-32 rounded-2xl overflow-hidden mb-2.5">
+                <Image
+                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80"
+                  alt="Build Digital Asset"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute bottom-2 left-2 flex gap-1.5 text-[9px] text-white">
+                  <span className="bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full">
+                    17 Lessons
+                  </span>
+                </div>
+              </div>
+
+              <h4 className="font-bold text-xs text-gray-900">
+                Build Digital Asset
+              </h4>
+              <p className="text-[10px] text-blue-500 font-medium mb-2">
+                by purepearl studio
+              </p>
+
+              <div className="flex items-center gap-1.5 bg-gray-100 w-fit px-2 py-0.5 rounded-full text-[10px] text-gray-600 mb-2">
+                <BarChart2 className="w-2.5 h-2.5" />
+                <span>Beginner</span>
+              </div>
+              <div className="text-xs font-bold text-[#0b56fd] pt-1.5 border-t border-gray-100">
+                $25{" "}
+                <span className="text-[9px] text-gray-400 font-normal">
+                  /lifetime
+                </span>
+              </div>
+            </div>
+
+            {/* Floating Card 2: Front Right (The Power of Big Data) */}
+            <div className="absolute right-4 top-4 w-72 bg-white text-zinc-900 rounded-3xl p-3.5 shadow-2xl z-20 border border-gray-100">
+              <div className="relative w-full h-36 rounded-2xl overflow-hidden mb-3">
+                <Image
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=500&q=80"
+                  alt="Big Data"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute bottom-2 left-2 right-2 flex justify-between text-[9px] text-white">
+                  <span className="bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full">
+                    17 Lessons
+                  </span>
+                  <span className="bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full">
+                    2 hours 16 mins
+                  </span>
+                  <span className="bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full">
+                    59 Comments
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-bold text-xs sm:text-sm text-gray-900">
+                    the Power of Big Data
+                  </h4>
+                  <p className="text-[10px] text-blue-500 font-medium">
+                    by purepearl studio
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-gray-700">
+                  <span>4.5</span>
+                  <Star className="w-3 h-3 fill-[#c6f800] text-[#c6f800]" />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mt-2.5 mb-2">
+                <div className="flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded-full text-[10px] text-gray-600">
+                  <BarChart2 className="w-2.5 h-2.5" />
+                  <span>Beginner</span>
+                </div>
+                <div className="flex items-center -space-x-1.5">
+                  <img
+                    className="w-5 h-5 rounded-full border border-white object-cover"
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop"
+                    alt=""
+                  />
+                  <img
+                    className="w-5 h-5 rounded-full border border-white object-cover"
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
+                    alt=""
+                  />
+                  <img
+                    className="w-5 h-5 rounded-full border border-white object-cover"
+                    src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&h=50&fit=crop"
+                    alt=""
+                  />
+                  <div className="w-5 h-5 rounded-full border border-white bg-black text-white font-bold text-[7px] flex items-center justify-center">
+                    26+
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-xs font-bold text-[#0b56fd] pt-2 border-t border-gray-100">
+                $25{" "}
+                <span className="text-[9px] text-gray-400 font-normal">
+                  /lifetime
+                </span>
+              </div>
+            </div>
+
+            {/* White Floating 3D Coil */}
+            <div className="absolute right-24 bottom-14 w-16 h-20 pointer-events-none z-30 opacity-90">
+              <svg
+                viewBox="0 0 100 120"
+                fill="none"
+                className="w-full h-full text-white drop-shadow-md"
+              >
+                <path
+                  d="M20,15 C75,10 85,35 50,45 C15,55 20,80 55,80 C85,80 75,110 30,110"
+                  stroke="currentColor"
+                  strokeWidth="16"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+
+            {/* Floating Card 3: Lime Happy Students Badge */}
+            <div className="absolute right-12 bottom-0 z-30 bg-[#c6f800] text-black p-3.5 rounded-2xl shadow-xl border border-lime-300 min-w-[180px]">
+              <h5 className="font-bold text-[11px] text-black">
+                Happy Students
+              </h5>
+              <div className="flex items-center gap-1 text-[10px] font-semibold my-1 text-black">
+                <span>4.5</span>
+                <span className="text-black/70">(240)</span>
+                <Star className="w-3 h-3 fill-black text-black inline -mt-0.5" />
+              </div>
+              <div className="flex items-center -space-x-1.5 mt-1.5">
+                <img
+                  className="w-6 h-6 rounded-full border border-[#c6f800] object-cover"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop"
+                  alt=""
+                />
+                <img
+                  className="w-6 h-6 rounded-full border border-[#c6f800] object-cover"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
+                  alt=""
+                />
+                <img
+                  className="w-6 h-6 rounded-full border border-[#c6f800] object-cover"
+                  src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&h=50&fit=crop"
+                  alt=""
+                />
+                <div className="w-6 h-6 rounded-full border border-[#c6f800] bg-black text-white font-bold text-[8px] flex items-center justify-center">
+                  2K+
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="text-right">
-          <Link href="/forgot-password" className="text-sm text-blue-500">
-            Forgot password?
-          </Link>
+        {/* ========================================================================= */}
+        {/* RIGHT COLUMN: White Login Card                                            */}
+        {/* ========================================================================= */}
+        <div className="lg:col-span-6 flex justify-center lg:justify-end">
+          <div className="w-full max-w-lg bg-white rounded-[32px] p-8 sm:p-12 shadow-2xl text-zinc-900">
+            {/* Header */}
+            <span className="text-xs sm:text-sm font-semibold text-[#0b56fd] block mb-2">
+              Sign In
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight mb-8">
+              Welcome Back
+            </h2>
+
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Email Field */}
+              <div>
+                <label className="text-xs font-semibold text-gray-700 block mb-1.5">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="designer@example.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none placeholder:text-gray-400 focus:border-[#0b56fd] focus:ring-1 focus:ring-[#0b56fd] transition"
+                />
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <label className="text-xs font-semibold text-gray-700 block mb-1.5">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="********"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none placeholder:text-gray-400 focus:border-[#0b56fd] focus:ring-1 focus:ring-[#0b56fd] transition tracking-widest"
+                />
+              </div>
+
+              {/* Sign In Button (Aligned Right as in Figma) */}
+              <div className="flex justify-end pt-3">
+                <button
+                  type="submit"
+                  className="bg-[#c6f800] hover:bg-[#b5e300] active:scale-95 text-black font-semibold text-sm px-8 py-3 rounded-full shadow-md transition-all cursor-pointer"
+                >
+                  Sign In
+                </button>
+              </div>
+            </form>
+
+            {/* "or" Divider */}
+            <div className="relative my-8 flex items-center justify-center">
+              <div className="border-t border-gray-200 w-full" />
+              <span className="bg-white px-3 text-xs text-gray-400 absolute">
+                or
+              </span>
+            </div>
+
+            {/* Social Logins (Facebook & Google) */}
+            <div className="flex items-center justify-center gap-4">
+              {/* Facebook Button */}
+              <button
+                type="button"
+                aria-label="Sign in with Facebook"
+                className="w-12 h-12 rounded-2xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 active:scale-95 transition shadow-sm"
+              >
+                <svg
+                  className="w-5 h-5 text-black"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                </svg>
+              </button>
+
+              {/* Google Button */}
+              <button
+                type="button"
+                aria-label="Sign in with Google"
+                className="w-12 h-12 rounded-2xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 active:scale-95 transition shadow-sm"
+              >
+                <svg
+                  className="w-5 h-5 text-black"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Bottom Register Link */}
+            <div className="text-center mt-10 pt-2 text-xs text-gray-500 font-medium">
+              New user?{" "}
+              <Link
+                href="/register"
+                className="text-[#0b56fd] font-semibold hover:underline"
+              >
+                Create an account
+              </Link>
+            </div>
+          </div>
         </div>
-
-        {error && (
-          <p className="text-red-500 text-sm text-center">{error}</p>
-        )}
-
-        <button className="w-full bg-black text-white py-3 rounded-lg flex justify-center">
-          {loading ? <Loader2 className="animate-spin" /> : "Login"}
-        </button>
-      </form>
-
-      <p className="text-center text-sm mt-6">
-        Don’t have an account?{" "}
-        <Link href="/registration" className="text-blue-500">
-          Sign up
-        </Link>
-      </p>
-    </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Suspense fallback={<div>Loading...</div>}>
-        <LoginForm />
-      </Suspense>
+      </div>
     </div>
   );
 }

@@ -40,4 +40,3 @@ Features
 - Authentication with NextAuth
 - MongoDB database integration
 - Responsive UI
-- Course cards with individual course routes

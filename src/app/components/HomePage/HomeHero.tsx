@@ -21,12 +21,10 @@ const HERO_BG: React.CSSProperties = {
 const LIME = "#cbfc01";
 
 const AVATARS = [
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=faces",
-  "https://i.pravatar.cc/100?img=12",
-  "https://i.pravatar.cc/100?img=32",
-  "https://i.pravatar.cc/100?img=47",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_wgiqjl.png",
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_2_n3zxi4.png",
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_3_s43kst.png",
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_1_dzz8sn.png"
 ];
 
 export default function HeroPage() {
@@ -171,11 +169,11 @@ export default function HeroPage() {
             }}
           />
 
-        {/* Person */}
-<div
-  className="pointer-events-none absolute z-10"
-   style={{ left: u(423), top: u(360), width: u(700), height: u(546) }}
->
+          {/* Person */}
+          <div
+            className="pointer-events-none absolute z-10"
+            style={{ left: u(423), top: u(360), width: u(700), height: u(546) }}
+          >
             <Image
               src="/home_human.png"
               alt="Student with laptop"

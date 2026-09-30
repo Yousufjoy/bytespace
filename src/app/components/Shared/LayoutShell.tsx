@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 // Routes where the navbar and footer should be hidden
-const HIDE_CHROME_ON = ["/login", "/register"];
+const HIDE_CHROME_ON = ["/login", "/registration"];
 
 export default function LayoutShell({
   children,

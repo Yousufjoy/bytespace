@@ -3,24 +3,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Star, BarChart2 } from "lucide-react";
 
 /* ------------------------------ Assets ------------------------------ */
 
 // Swap these with your own avatar / course images
 const AVATARS = [
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_wgiqjl.png",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_2_n3zxi4.png",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_3_s43kst.png",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_1_dzz8sn.png",
 ];
 
 const DASHBOARD_IMG =
   "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=700&q=80";
 const BACK_CARD_IMG =
-  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80";
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766311/Frame_11_pr9ug5.png";
 
 /* --------------------------- Small components --------------------------- */
 
@@ -124,11 +124,35 @@ function CourseCard({
 /* --------------------------------- Page --------------------------------- */
 
 export default function LoginPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signing in:", formData);
+    setError("");
+    setLoading(true);
+
+    try {
+      const result = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      router.push("/");
+      router.refresh();
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -283,12 +307,19 @@ export default function LoginPage() {
               />
             </div>
 
+            {error && (
+              <p role="alert" className="text-sm text-red-600">
+                {error}
+              </p>
+            )}
+
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="h-[46px] w-[104px] cursor-pointer rounded-full bg-[#d4ff1f] text-lg font-medium text-black transition-all hover:bg-[#c6ee00] active:scale-95"
+                disabled={loading}
+                className="h-[46px] w-[104px] cursor-pointer rounded-full bg-[#d4ff1f] text-lg font-medium text-black transition-all hover:bg-[#c6ee00] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Sign In
+                {loading ? "..." : "Sign In"}
               </button>
             </div>
           </form>
@@ -300,7 +331,7 @@ export default function LoginPage() {
             <span className="h-px flex-1 bg-zinc-300" />
           </div>
 
-          {/* Social buttons */}
+          {/* Social buttons (Facebook is UI only) */}
           <div className="mt-11 flex items-center justify-center gap-4">
             <button
               type="button"
@@ -315,25 +346,12 @@ export default function LoginPage() {
                 <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
               </svg>
             </button>
-            <button
-              type="button"
-              aria-label="Sign in with Google"
-              className="flex h-[72px] w-[72px] items-center justify-center rounded-[24px] border border-zinc-300 transition hover:bg-zinc-50 active:scale-95"
-            >
-              <svg
-                className="h-9 w-9 text-black"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-              </svg>
-            </button>
           </div>
 
           {/* Register link */}
           <p className="mt-12 text-center text-lg font-light leading-6 text-zinc-500 sm:mt-[75px]">
             New user?{" "}
-            <Link href="/register" className="text-[#0b56fd] hover:underline">
+            <Link href="/registration" className="text-[#0b56fd] hover:underline">
               Create an account
             </Link>
           </p>

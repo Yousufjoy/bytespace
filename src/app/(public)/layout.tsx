@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AuthProvider from "./../../Providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "ByteSpace - Online Learning Platform",
@@ -11,11 +10,5 @@ export default function PublicLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <AuthProvider>
-      
-      {children}
-     
-    </AuthProvider>
-  );
+  return <>{children}</>;
 }

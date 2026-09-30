@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import LayoutShell from "./components/Shared/LayoutShell";
-
+import AuthProvider from "../Providers/AuthProvider";
 export const metadata: Metadata = {
   title: "Nextjs App",
   description: "Nextjs App",
@@ -15,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LayoutShell>{children}</LayoutShell>
+        <AuthProvider>
+          <LayoutShell>{children}</LayoutShell>
+        </AuthProvider>
       </body>
     </html>
   );

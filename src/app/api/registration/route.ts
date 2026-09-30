@@ -1,63 +1,70 @@
-import { connectDB } from "@/lib/connectDB";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
-import { sendVerificationEmail } from "@/lib/mailer";
+import { connectDB } from "@/lib/connectDB";
 
 export const POST = async (req: Request) => {
   try {
-    const { name, email, password } = await req.json();
+    const body = await req.json();
+    const name = String(body?.name ?? "").trim();
+    const email = String(body?.email ?? "").trim().toLowerCase();
+    const password = String(body?.password ?? "");
 
     if (!name || !email || !password) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      return NextResponse.json({ error: "Please enter a valid email address" }, { status: 400 });
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
+        { status: 400 }
+      );
     }
 
     const db = await connectDB();
     if (!db) {
-      return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+      throw new Error("Database connection failed");
     }
+    const users = db.collection("users");
 
-    const usersCollection = db.collection("users");
-
-    const existingUser = await usersCollection.findOne({ email });
+    const existingUser = await users.findOne({ email });
     if (existingUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+      return NextResponse.json(
+        { error: "An account with this email already exists" },
+        { status: 409 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ✅ Generate verification token
-    const verificationToken = crypto.randomBytes(32).toString("hex");
-    const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-    await usersCollection.insertOne({
-      name,
-      email,
-      password: hashedPassword,
-      role: "user",
-      isVerified: false,
-      verificationToken,
-      verificationTokenExpiry,
-      createdAt: new Date(),
-    });
-
-    // ✅ Send verification email
     try {
-      await sendVerificationEmail(email, verificationToken);
-    } catch (err) {
-      console.error("Verification email failed:", err);
-      return NextResponse.json(
-        { error: "Account created but failed to send verification email. Check EMAIL_USER and EMAIL_PASS." },
-        { status: 500 }
-      );
+      await users.insertOne({
+        name,
+        email,
+        password: hashedPassword,
+        role: "user",
+        createdAt: new Date(),
+      });
+    } catch (err: unknown) {
+      // Duplicate key (race condition between two simultaneous requests)
+      if ((err as { code?: number })?.code === 11000) {
+        return NextResponse.json(
+          { error: "An account with this email already exists" },
+          { status: 409 }
+        );
+      }
+      throw err;
     }
 
     return NextResponse.json(
-      { message: "Registration successful! Please check your email to verify your account." },
+      { message: "Registration successful" },
       { status: 201 }
     );
   } catch (error) {
     console.error("Registration error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
   }
 };

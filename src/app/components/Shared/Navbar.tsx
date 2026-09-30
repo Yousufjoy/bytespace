@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession, signOut } from "next-auth/react";
 import { ShoppingBag } from "lucide-react";
 
 const NAV_BG: React.CSSProperties = {
@@ -11,6 +14,10 @@ const NAV_BG: React.CSSProperties = {
 };
 
 export default function Navbar() {
+  const { data: session, status } = useSession();
+
+  const firstName = session?.user?.name?.trim().split(" ")[0] ?? "Account";
+
   return (
     <header
       className="relative z-50 h-[72px] w-full text-white md:h-[min(8.3333vw,110px)]"
@@ -56,20 +63,44 @@ export default function Navbar() {
         </nav>
 
         {/* RIGHT ACTIONS */}
-        <div className="flex items-center gap-6 justify-self-end md:gap-[clamp(24px,2.5vw,40px)]">
-          <Link
-            href="/login"
-            className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
-          >
-            Sign In
-          </Link>
+        <div className="flex items-center gap-4 justify-self-end sm:gap-6 md:gap-[clamp(24px,2.5vw,40px)]">
+          {status === "loading" ? (
+            // Reserve space while the session loads to avoid layout jump
+            <span className="h-6 w-[120px]" aria-hidden />
+          ) : session ? (
+            <>
+              <span
+                className="max-w-[90px] truncate text-[16px] font-medium text-[#cbfc01] sm:max-w-[140px] lg:text-[18px]"
+                title={session.user?.name ?? undefined}
+              >
+                Hi, {firstName}
+              </span>
 
-          <Link
-            href="/join"
-            className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
-          >
-            Join Us
-          </Link>
+              <button
+                type="button"
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="cursor-pointer text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
+              >
+                Sign In
+              </Link>
+
+              <Link
+                href="/registration"
+                className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
+              >
+                Join Us
+              </Link>
+            </>
+          )}
 
           <button
             aria-label="Cart"

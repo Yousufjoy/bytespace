@@ -3,24 +3,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Star, BarChart2 } from "lucide-react";
 
 /* ------------------------------ Assets ------------------------------ */
 
 // Swap these with your own avatar / course images
 const AVATARS = [
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_wgiqjl.png",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_2_n3zxi4.png",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_3_s43kst.png",
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_1_dzz8sn.png",
 ];
 
 const DASHBOARD_IMG =
   "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=700&q=80";
 const BACK_CARD_IMG =
-  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80";
+  "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766311/Frame_11_pr9ug5.png";
 
 /* --------------------------- Small components --------------------------- */
 
@@ -124,15 +124,59 @@ function CourseCard({
 /* --------------------------------- Page --------------------------------- */
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Registering:", formData);
+    setError("");
+    setLoading(true);
+
+    try {
+      // 1. Create the account
+      const res = await fetch("/api/registration", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Registration failed. Please try again.");
+        return;
+      }
+
+      // 2. Sign the user in automatically
+      const result = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        // Account exists but auto sign-in failed: send to login
+        router.push("/login");
+        return;
+      }
+
+      router.push("/");
+      router.refresh();
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass =
@@ -297,6 +341,7 @@ export default function RegisterPage() {
               <input
                 type="password"
                 required
+                minLength={6}
                 placeholder="********"
                 value={formData.password}
                 onChange={(e) =>
@@ -306,12 +351,19 @@ export default function RegisterPage() {
               />
             </div>
 
+            {error && (
+              <p role="alert" className="text-sm text-red-600">
+                {error}
+              </p>
+            )}
+
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="h-[46px] w-[123px] cursor-pointer rounded-full bg-[#d4ff1f] text-lg font-medium text-black transition-all hover:bg-[#c6ee00] active:scale-95"
+                disabled={loading}
+                className="h-[46px] w-[123px] cursor-pointer rounded-full bg-[#d4ff1f] text-lg font-medium text-black transition-all hover:bg-[#c6ee00] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Continue
+                {loading ? "Creating..." : "Continue"}
               </button>
             </div>
           </form>

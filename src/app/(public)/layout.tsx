@@ -14,12 +14,10 @@ export default function PublicLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen w-full bg-[#0b56fd] text-white selection:bg-[#c6f800] selection:text-black">
-      <AuthProvider>
-        <Navbar />
-        {children}
-        <Footer />
-      </AuthProvider>
-    </div>
+    <AuthProvider>
+      <Navbar />
+      {children}
+      <Footer />
+    </AuthProvider>
   );
 }

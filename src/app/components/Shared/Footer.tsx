@@ -1,6 +1,8 @@
-'use client'
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const FOOTER_LINKS = {
   col1: [
@@ -28,29 +30,25 @@ const FOOTER_LINKS = {
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white text-zinc-900 border-t border-gray-100 pt-16 pb-12 px-6">
-      <div className="max-w-7xl mx-auto">
+    <footer className="w-full border-t border-gray-100 bg-white px-6 pb-12 pt-16 text-zinc-900">
+      <div className="mx-auto max-w-7xl">
         {/* Top Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-16">
+        <div className="grid grid-cols-1 gap-12 pb-16 lg:grid-cols-12 lg:gap-16">
           {/* Left Column: Logo & Newsletter */}
-          <div className="lg:col-span-6 max-w-lg">
+          <div className="max-w-lg lg:col-span-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group mb-5">
-              <div className="w-8 h-8 rounded-lg bg-[#c6f800] flex items-center justify-center font-black text-black text-lg shadow-sm">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5 text-black"
-                >
-                  <path d="M4 4h7a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H4V4zm7 8a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H4v-8h7z" />
-                </svg>
-              </div>
-              <span className="font-extrabold text-2xl tracking-tight text-gray-900">
-                ByteSpace
-              </span>
+            <Link href="/" className="mb-5 inline-flex items-center">
+              <Image
+                src="/footer.png"
+                alt="ByteSpace"
+                width={180}
+                height={50}
+                className="h-auto w-[180px] object-contain"
+                priority
+              />
             </Link>
 
-            <p className="text-gray-600 text-xs sm:text-sm mb-6 leading-relaxed">
+            <p className="mb-6 text-xs leading-relaxed text-gray-600 sm:text-sm">
               Stay Up to date with our latest features and releases by joining
               our newsletter.
             </p>
@@ -58,36 +56,37 @@ export default function Footer() {
             {/* Newsletter Input + Button */}
             <form
               onSubmit={(e) => e.preventDefault()}
-              className="flex items-center gap-3 mb-4"
+              className="mb-4 flex items-center gap-3"
             >
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full max-w-sm px-5 py-3 rounded-full border border-gray-300 text-sm outline-none text-gray-800 placeholder:text-gray-400 focus:border-gray-500 transition"
+                className="w-full max-w-sm rounded-full border border-gray-300 px-5 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-gray-500"
               />
+
               <button
                 type="submit"
-                className="bg-[#c6f800] hover:bg-[#b5e300] active:scale-95 text-black font-semibold text-sm px-8 py-3 rounded-full shadow-sm transition-all shrink-0"
+                className="shrink-0 rounded-full bg-[#c6f800] px-8 py-3 text-sm font-semibold text-black shadow-sm transition-all hover:bg-[#b5e300] active:scale-95"
               >
                 Search
               </button>
             </form>
 
-            <p className="text-[11px] text-gray-400 leading-normal">
+            <p className="text-[11px] leading-normal text-gray-400">
               By subscribing, you agree to our Privacy Policy and consent to
               receive updates from our company.
             </p>
           </div>
 
           {/* Right Columns: Nav Links */}
-          <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-3 gap-8 text-xs sm:text-sm">
+          <div className="grid grid-cols-2 gap-8 text-xs sm:grid-cols-3 sm:text-sm lg:col-span-6">
             {/* Column 1 */}
             <ul className="space-y-4">
               {FOOTER_LINKS.col1.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-gray-600 hover:text-black transition"
+                    className="text-gray-600 transition hover:text-black"
                   >
                     {item.label}
                   </Link>
@@ -101,7 +100,7 @@ export default function Footer() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-gray-600 hover:text-black transition"
+                    className="text-gray-600 transition hover:text-black"
                   >
                     {item.label}
                   </Link>
@@ -115,7 +114,7 @@ export default function Footer() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-gray-600 hover:text-black transition"
+                    className="text-gray-600 transition hover:text-black"
                   >
                     {item.label}
                   </Link>
@@ -125,18 +124,20 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Legal */}
-        <div className="pt-8 border-t border-gray-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+        {/* Bottom Bar */}
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200/80 pt-8 text-xs text-gray-500 sm:flex-row">
           <p>© 2023 ByteSpace. All rights reserved.</p>
 
           <div className="flex items-center gap-6">
-            <Link href="/privacy" className="hover:text-black transition">
+            <Link href="/privacy" className="transition hover:text-black">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-black transition">
+
+            <Link href="/terms" className="transition hover:text-black">
               Terms of Service
             </Link>
-            <Link href="/cookies" className="hover:text-black transition">
+
+            <Link href="/cookies" className="transition hover:text-black">
               Cookies Settings
             </Link>
           </div>

@@ -5,27 +5,21 @@ const TESTIMONIALS = [
   {
     name: "Sarah M.",
     role: "Enthusiastic Learner",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-    bgAccent: "bg-amber-400",
+    image: "/sarah.png",
     quote:
       '"ByteSpace has transformed my approach to learning. The diverse range of courses and the quality of content provided by creators have exceeded my expectations. The platform truly fosters a sense of community and lifelong learning."',
   },
   {
     name: "James L.",
     role: "Lifelong Learner",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-    bgAccent: "bg-zinc-700",
+    image: "/james.png",
     quote:
       '"I\'ve tried several online learning platforms, and ByteSpace stands out for its vibrant community and the variety of courses available. The easy navigation and engaging content make it a go-to platform for continuous skill development."',
   },
   {
     name: "Alex B.",
     role: "Inspired Creator",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-    bgAccent: "bg-blue-100",
+    image: "/alex.png",
     quote:
       '"As a creator, ByteSpace has been a game-changer for me. The Course Editor is user-friendly, and the support from the community is incredible. It\'s fulfilling to see my courses making a positive impact on learners globally."',
   },
@@ -33,18 +27,28 @@ const TESTIMONIALS = [
 
 export default function TestimonialsSection() {
   return (
-    <section className="relative w-full bg-white text-zinc-900 py-20 md:py-28 px-6 overflow-hidden">
-      {/* Ambient Gradient Glows */}
-      <div className="pointer-events-none absolute -top-10 right-0 w-[480px] h-[480px] bg-[#c6f800]/25 rounded-full blur-[140px]" />
-      <div className="pointer-events-none absolute -bottom-10 left-0 w-[420px] h-[420px] bg-[#0b56fd]/15 rounded-full blur-[130px]" />
+    <section className="relative w-full overflow-hidden bg-[#fafafa] px-6 pb-16 pt-16 text-zinc-900 md:pb-14 md:pt-20">
+      {/* Ambient background glows */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: [
+            "radial-gradient(650px 380px at 52% 26%, rgba(198,248,0,0.32), transparent 70%)",
+            "radial-gradient(380px 320px at 100% 42%, rgba(198,248,0,0.30), transparent 70%)",
+            "radial-gradient(480px 400px at 2% 90%, rgba(11,86,253,0.22), transparent 70%)",
+            "radial-gradient(300px 300px at 0% 62%, rgba(11,86,253,0.07), transparent 70%)",
+          ].join(","),
+        }}
+      />
 
-      <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Header: Left Title + Right Description */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-[1.15] max-w-xl">
-            Discover What Our <br /> Community Is Saying
+      <div className="relative z-10 mx-auto max-w-[1200px]">
+        {/* Header: title left, description right */}
+        <div className="mb-12 flex flex-col justify-between gap-6 md:mb-[72px] lg:flex-row lg:items-center">
+          <h2 className="text-3xl font-semibold leading-[1.2] tracking-tight text-zinc-950 sm:text-4xl lg:text-[44px]">
+            Discover What Our
+            <br className="hidden lg:block" /> Community Is Saying
           </h2>
-          <p className="text-gray-500 text-xs sm:text-sm leading-relaxed max-w-md font-normal">
+          <p className="text-base font-light leading-[1.75] text-zinc-600 sm:text-[17px] lg:w-[580px] lg:shrink-0">
             At ByteSpace, our vibrant community of learners and creators is at
             the heart of what we do. Hear directly from those who have
             experienced the transformative journey of learning and creating on
@@ -53,40 +57,36 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        {/* Testimonials 3-Card Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Testimonial cards */}
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
           {TESTIMONIALS.map((t) => (
             <div
               key={t.name}
-              className="bg-white rounded-3xl p-7 border border-gray-100 shadow-[0_10px_35px_-5px_rgba(0,0,0,0.06)] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[28px] bg-white p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.06)]"
             >
-              <div>
-                {/* Avatar with Circular Color Backdrop */}
-                <div
-                  className={`w-14 h-14 rounded-full ${t.bgAccent} overflow-hidden relative mb-5 flex items-center justify-center shadow-inner`}
-                >
-                  <Image
-                    src={t.image}
-                    alt={t.name}
-                    width={56}
-                    height={56}
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-
-                {/* Name & Role */}
-                <h3 className="font-extrabold text-base text-gray-900 tracking-tight">
-                  {t.name}
-                </h3>
-                <span className="text-xs font-semibold text-[#0b56fd] block mb-5">
-                  {t.role}
-                </span>
-
-                {/* Testimonial Quote */}
-                <p className="text-xs sm:text-[13px] text-gray-500 leading-relaxed font-normal">
-                  {t.quote}
-                </p>
+              {/* Avatar */}
+              <div className="relative h-20 w-20 overflow-hidden rounded-full">
+                <Image
+                  src={t.image}
+                  alt={t.name}
+                  width={80}
+                  height={80}
+                  className="h-full w-full object-cover"
+                />
               </div>
+
+              {/* Name & role */}
+              <h3 className="mt-6 text-xl font-semibold tracking-tight text-zinc-950">
+                {t.name}
+              </h3>
+              <span className="mt-1 block text-base text-[#0b56fd] sm:text-[17px]">
+                {t.role}
+              </span>
+
+              {/* Quote */}
+              <p className="mt-6 text-base font-light leading-[1.75] text-zinc-600 sm:text-[17px]">
+                {t.quote}
+              </p>
             </div>
           ))}
         </div>

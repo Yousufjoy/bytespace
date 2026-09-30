@@ -1,73 +1,100 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
+
+/**
+ * Full-width navbar
+ * - Background spans the entire viewport
+ * - Content uses almost the full available width
+ * - Larger navigation typography
+ * - More spacing between nav items
+ */
+
+const NAV_BG: React.CSSProperties = {
+  backgroundColor: "#003be2",
+  backgroundImage:
+    "linear-gradient(to right, rgba(255,255,255,0.12) 2px, transparent 2px), linear-gradient(to bottom, rgba(255,255,255,0.12) 2px, transparent 2px)",
+  backgroundSize:
+    "max(min(8.3333vw, 110px), 60px) max(min(8.3333vw, 110px), 60px)",
+};
 
 export default function Navbar() {
   return (
     <header
-      className="relative z-50 mx-auto flex h-20 max-w-5xl items-center justify-between px-4 text-sm text-white md:grid md:h-[106px] md:grid-cols-[1fr_auto_1fr] bg-[#0038e0]"
-      style={{
-        // subtle 100px grid from the design
-        backgroundImage:
-          "linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)",
-        backgroundSize: "100px 100px",
-        backgroundPosition: "center top",
-      }}
+      className="relative z-50 h-[72px] w-full text-white md:h-[min(8.3333vw,110px)]"
+      style={NAV_BG}
     >
-      {/* Brand */}
-      <Link href="/" className="flex items-center gap-2 justify-self-start">
-        <svg
-          viewBox="0 0 26 28"
-          className="h-7 w-[26px]"
-          fill="#c6f800"
-          aria-hidden="true"
-        >
-          <path
-            fillRule="evenodd"
-            d="M0 4a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v8.2A9 9 0 0 1 26 19a9 9 0 0 1-9 9H4a4 4 0 0 1-4-4V4zM9 15.5v7l6-3.5-6-3.5z"
+      <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between px-6 sm:px-8 md:grid md:grid-cols-[1fr_auto_1fr] md:px-10 lg:px-14 xl:px-16">
+        {/* ================================================================ */}
+        {/* LOGO */}
+        {/* ================================================================ */}
+        <Link href="/" className="block justify-self-start">
+          <Image
+            src="/Header_Logo.png"
+            alt="ByteSpace"
+            width={168}
+            height={33}
+            priority
+            className="h-auto w-[145px] md:w-[clamp(145px,12vw,175px)]"
           />
-        </svg>
-
-        <span className="text-xl font-bold tracking-tight">ByteSpace</span>
-      </Link>
-
-      {/* Center links */}
-      <nav className="hidden items-center gap-5 md:flex">
-        <Link href="/" aria-current="page" className="text-white">
-          Home
         </Link>
 
-        <Link
-          href="#courses"
-          className="text-white/85 transition-colors hover:text-white"
-        >
-          Courses
-        </Link>
+        {/* ================================================================ */}
+        {/* CENTER NAVIGATION */}
+        {/* ================================================================ */}
+        <nav className="hidden items-center md:flex md:gap-[clamp(32px,3.5vw,56px)]">
+          <Link
+            href="/"
+            aria-current="page"
+            className="text-[16px] font-medium text-white transition-colors hover:text-[#cbfc01] lg:text-[18px]"
+          >
+            Home
+          </Link>
 
-        <Link
-          href="#creators"
-          className="text-white/85 transition-colors hover:text-white"
-        >
-          Creators
-        </Link>
-      </nav>
+          <Link
+            href="#courses"
+            className="text-[16px] font-medium text-white/90 transition-colors hover:text-white lg:text-[18px]"
+          >
+            Courses
+          </Link>
 
-      {/* Right actions */}
-      <div className="flex items-center gap-5 justify-self-end">
-        <Link href="/signin" className="transition-colors hover:text-[#c6f800]">
-          Sign In
-        </Link>
+          <Link
+            href="#creators"
+            className="text-[16px] font-medium text-white/90 transition-colors hover:text-white lg:text-[18px]"
+          >
+            Creators
+          </Link>
+        </nav>
 
-        <Link href="/join" className="transition-colors hover:text-[#c6f800]">
-          Join Us
-        </Link>
+        {/* ================================================================ */}
+        {/* RIGHT ACTIONS */}
+        {/* ================================================================ */}
+        <div className="flex items-center gap-6 justify-self-end md:gap-[clamp(24px,2.5vw,40px)]">
+          <Link
+            href="/signin"
+            className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
+          >
+            Sign In
+          </Link>
 
-        <button
-          aria-label="Cart"
-          className="rounded p-0.5 transition-colors hover:text-[#c6f800] focus-visible:outline-2 focus-visible:outline-[#c6f800]"
-        >
-          <ShoppingBag className="h-[18px] w-[18px]" strokeWidth={1.5} />
-        </button>
+          <Link
+            href="/join"
+            className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
+          >
+            Join Us
+          </Link>
+
+          <button
+            aria-label="Cart"
+            className="rounded transition-colors hover:text-[#cbfc01] focus-visible:outline-2 focus-visible:outline-[#cbfc01]"
+          >
+            <ShoppingBag
+              className="h-[21px] w-[21px] lg:h-[23px] lg:w-[23px]"
+              strokeWidth={1.6}
+            />
+          </button>
+        </div>
       </div>
     </header>
   );

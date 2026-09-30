@@ -17,7 +17,7 @@ export const connectDB = async (): Promise<Db | undefined> => {
         deprecationErrors: true,
       },
     });
-    db = client.db("test");
+    db = client.db("bytespace");
     return db;
   } catch (error) {
     console.log({ error });

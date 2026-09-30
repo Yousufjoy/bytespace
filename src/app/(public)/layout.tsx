@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import AuthProvider from "./../../Providers/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "Nextjs App",
-  description: "Nextjs App",
+  title: "ByteSpace - Online Learning Platform",
+  description: "Get access to hundreds of courses available",
 };
 
 export default function PublicLayout({
@@ -11,9 +10,5 @@ export default function PublicLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div>
-      <AuthProvider>{children}</AuthProvider>
-    </div>
-  );
+  return <>{children}</>;
 }

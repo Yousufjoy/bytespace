@@ -1,0 +1,126 @@
+{
+  "avatars": [
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_wgiqjl.png",
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_2_n3zxi4.png",
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766548/Ellipse_3_s43kst.png",
+    "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766549/Ellipse_1_dzz8sn.png"
+  ],
+  "categoryRows": [
+    [
+      "Featured",
+      "Music",
+      "Drawing & Painting",
+      "Marketing",
+      "Animation",
+      "Social Media",
+      "UI/UX Design",
+      "Creative Marketing"
+    ],
+    [
+      "Digital Illustration",
+      "Film & Video",
+      "Crafts",
+      "Freelance & Entrepreneurship",
+      "Graphic Design",
+      "Photography"
+    ],
+    ["Productivity", "Web Development", "Data Science", "Cooking", "+ More"]
+  ],
+  "categories": [
+    "Featured",
+    "Music",
+    "Drawing & Painting",
+    "Marketing",
+    "Animation",
+    "Social Media",
+    "UI/UX Design",
+    "Creative Marketing",
+    "Cooking"
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "title": "Learn Figma from Basic",
+      "author": "purepearl studio",
+      "category": "UI/UX Design",
+      "rating": 4.5,
+      "level": "Beginner",
+      "price": 25,
+      "lessons": 17,
+      "duration": "2 hours 16 mins",
+      "comments": 59,
+      "students": "2K+",
+      "image": "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766312/Frame_9_d2kkz1.png"
+    },
+    {
+      "id": 2,
+      "title": "Build Digital Asset",
+      "author": "purepearl studio",
+      "category": "Graphic Design",
+      "rating": 4.5,
+      "level": "Beginner",
+      "price": 25,
+      "lessons": 17,
+      "duration": "2 hours 16 mins",
+      "comments": 59,
+      "students": "2K+",
+      "image": "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766311/Frame_11_pr9ug5.png"
+    },
+    {
+      "id": 3,
+      "title": "the Power of Big Data",
+      "author": "purepearl studio",
+      "category": "Data Science",
+      "rating": 4.5,
+      "level": "Beginner",
+      "price": 25,
+      "lessons": 17,
+      "duration": "2 hours 16 mins",
+      "comments": 59,
+      "students": "2K+",
+      "image": "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766312/Frame_13_vhtw2q.png"
+    },
+    {
+      "id": 4,
+      "title": "Balancing Productivity an...",
+      "author": "purepearl studio",
+      "category": "Productivity",
+      "rating": 4.5,
+      "level": "Beginner",
+      "price": 25,
+      "lessons": 17,
+      "duration": "2 hours 16 mins",
+      "comments": 59,
+      "students": "2K+",
+      "image": "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766312/Frame_8_bajkea.png"
+    },
+    {
+      "id": 5,
+      "title": "Mastering Money Management",
+      "author": "purepearl studio",
+      "category": "Freelance & Entrepreneurship",
+      "rating": 4.5,
+      "level": "Beginner",
+      "price": 25,
+      "lessons": 17,
+      "duration": "2 hours 16 mins",
+      "comments": 59,
+      "students": "2K+",
+      "image": "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766311/Frame_10_bqbdow.png"
+    },
+    {
+      "id": 6,
+      "title": "From Idea to Startup Success",
+      "author": "purepearl studio",
+      "category": "Freelance & Entrepreneurship",
+      "rating": 4.5,
+      "level": "Beginner",
+      "price": 25,
+      "lessons": 17,
+      "duration": "2 hours 16 mins",
+      "comments": 59,
+      "students": "2K+",
+      "image": "https://res.cloudinary.com/dcgt2umdd/image/upload/v1790766311/Frame_12_tqtem7.png"
+    }
+  ]
+}

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import AuthProvider from "./../../Providers/AuthProvider";
-import Navbar from "../components/Shared/Navbar";
-import Footer from "../components/Shared/Footer";
 
 export const metadata: Metadata = {
   title: "ByteSpace - Online Learning Platform",
@@ -15,9 +13,9 @@ export default function PublicLayout({
 }>) {
   return (
     <AuthProvider>
-      <Navbar />
+      
       {children}
-      <Footer />
+     
     </AuthProvider>
   );
 }

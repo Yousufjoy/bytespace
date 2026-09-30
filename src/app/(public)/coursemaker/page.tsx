@@ -2,7 +2,31 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Filter, BarChart2, LayoutGrid, ArrowUpDown, Star } from "lucide-react";
+import Link from "next/link";
+import { Filter, BarChart2, Shapes, AlignLeft, Star } from "lucide-react";
+
+/* ------------------------------ Design tokens ------------------------------ */
+
+const LIME = "#d4fb20";
+const BLUE = "#003be2";
+const INK = "#060a1f";
+const CARD_SHADOW = "shadow-[0_1px_2px_rgba(16,24,40,0.04)]";
+
+// Same container the courses page uses: 1200px at a 1440px viewport
+const WRAP = "mx-auto w-full xl:w-[83.333%] xl:max-w-[1700px]";
+
+// Swap with your own file, e.g. "/purepearl.png"
+const CREATOR_AVATAR =
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300";
+
+const AVATARS = [
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&crop=faces",
+  "https://i.pravatar.cc/80?img=47",
+];
+
+/* --------------------------------- Data --------------------------------- */
 
 const CREATOR_COURSES = [
   {
@@ -15,6 +39,7 @@ const CREATOR_COURSES = [
     lessons: 17,
     duration: "2 hours 16 mins",
     comments: 59,
+    students: "26+",
     image:
       "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=700&q=80",
   },
@@ -28,6 +53,7 @@ const CREATOR_COURSES = [
     lessons: 17,
     duration: "2 hours 16 mins",
     comments: 59,
+    students: "26+",
     image:
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
   },
@@ -41,6 +67,7 @@ const CREATOR_COURSES = [
     lessons: 17,
     duration: "2 hours 16 mins",
     comments: 59,
+    students: "26+",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=700&q=80",
   },
@@ -54,6 +81,7 @@ const CREATOR_COURSES = [
     lessons: 17,
     duration: "2 hours 16 mins",
     comments: 59,
+    students: "26+",
     image:
       "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=700&q=80",
   },
@@ -67,6 +95,7 @@ const CREATOR_COURSES = [
     lessons: 17,
     duration: "2 hours 16 mins",
     comments: 59,
+    students: "26+",
     image:
       "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=700&q=80",
   },
@@ -80,50 +109,49 @@ const CREATOR_COURSES = [
     lessons: 17,
     duration: "2 hours 16 mins",
     comments: 59,
+    students: "26+",
     image:
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=700&q=80",
   },
 ];
+
+const TOOLBAR_BTN =
+  "flex h-12 items-center gap-2 rounded-full border border-zinc-300 px-4 text-lg text-zinc-800 transition hover:bg-zinc-50";
+
+/* --------------------------------- Page --------------------------------- */
 
 export default function CreatorPage() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(12);
 
   const handleFollowToggle = () => {
-    if (isFollowing) {
-      setIsFollowing(false);
-      setFollowerCount((prev) => prev - 1);
-    } else {
-      setIsFollowing(true);
-      setFollowerCount((prev) => prev + 1);
-    }
+    setFollowerCount((prev) => (isFollowing ? prev - 1 : prev + 1));
+    setIsFollowing((prev) => !prev);
   };
 
   return (
-    <div className="w-full bg-white text-zinc-900 min-h-screen">
-      {/* ========================================================================= */}
-      {/* 1. CREATOR HERO HEADER BANNER                                             */}
-      {/* ========================================================================= */}
-      <section className="relative w-full bg-[#0b56fd] text-white pt-12 pb-14 px-6 overflow-hidden selection:bg-[#c6f800] selection:text-black">
-        {/* Subtle Background Grid Stripes */}
+    <div className="min-h-screen w-full bg-white text-zinc-900">
+      {/* ===================== 1. CREATOR HERO ===================== */}
+      <section className="relative w-full overflow-hidden bg-[#003be2] px-4 pb-[82px] pt-[38px] text-white selection:bg-[#d4fb20] selection:text-black sm:px-6 xl:px-0">
+        {/* Grid lines: vertical 110px (same as navbar), horizontal 120px */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-20 z-0"
+          className="pointer-events-none absolute inset-0 z-0"
           style={{
             backgroundImage: `
-              linear-gradient(to right, #ffffff 1px, transparent 1px),
-              linear-gradient(to bottom, #ffffff 1px, transparent 1px)
+              linear-gradient(to right, rgba(255,255,255,0.1) 2px, transparent 2px),
+              linear-gradient(to bottom, rgba(255,255,255,0.1) 2px, transparent 2px)
             `,
-            backgroundSize: "64px 64px",
+            backgroundSize: "110px 100%, 100% 120px",
+            backgroundPosition: "0 0, 0 105px",
           }}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto">
-          {/* Creator Profile Info */}
-          <div className="flex items-center gap-5 mb-6">
-            {/* Avatar with Pinkish Background */}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[#fbcfe8] overflow-hidden relative shadow-lg shrink-0 border border-white/20">
+        <div className={`relative z-10 ${WRAP}`}>
+          {/* Profile row */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[18px] bg-[#f9a8c9] sm:h-24 sm:w-24 sm:rounded-[22px]">
               <Image
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300"
+                src={CREATOR_AVATAR}
                 alt="PurePearl Studio"
                 fill
                 priority
@@ -131,24 +159,26 @@ export default function CreatorPage() {
               />
             </div>
 
-            {/* Name + Badge + Role */}
             <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h1 className="text-3xl font-semibold leading-[48px] tracking-tight text-white sm:text-[40px]">
                   PurePearl Studio
                 </h1>
-                <span className="bg-[#c6f800] text-black text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                <span
+                  className="inline-flex h-[35px] items-center rounded-full px-[23px] text-base text-black"
+                  style={{ background: LIME }}
+                >
                   Creator
                 </span>
               </div>
-              <p className="text-blue-100/90 text-xs sm:text-sm font-medium mt-1">
+              <p className="mt-[7px] text-lg font-light leading-7 text-white">
                 Passionate UI/UX, Web designer
               </p>
             </div>
           </div>
 
-          {/* Bio Paragraphs */}
-          <div className="space-y-3 max-w-4xl text-xs sm:text-sm text-blue-100/85 leading-relaxed font-normal mb-8">
+          {/* Bio (two paragraphs, no gap between them, like the design) */}
+          <div className="mt-10 text-lg font-light leading-[29px] text-white">
             <p>
               Welcome to the creative world of PurePearl Studio. Here,
               you&apos;ll discover the passion, expertise, and inspiration that
@@ -162,32 +192,27 @@ export default function CreatorPage() {
             </p>
           </div>
 
-          {/* Bottom Bar: Stats Pills & Follow Button */}
-          <div className="flex items-center justify-between gap-4 pt-2">
-            {/* Metric Pills */}
-            <div className="flex items-center gap-2.5">
-              <div className="bg-white text-zinc-900 px-5 py-2 rounded-full text-xs font-medium shadow-md">
-                <strong className="text-[#0b56fd] font-extrabold text-sm mr-1">
-                  3
-                </strong>
+          {/* Stats + Follow */}
+          <div className="mt-10 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-[46px] items-center gap-2 rounded-full bg-white px-6 text-lg text-zinc-900">
+                <span style={{ color: BLUE }}>3</span>
                 Products
               </div>
-              <div className="bg-white text-zinc-900 px-5 py-2 rounded-full text-xs font-medium shadow-md">
-                <strong className="text-[#0b56fd] font-extrabold text-sm mr-1">
-                  {followerCount}
-                </strong>
+              <div className="flex h-[46px] items-center gap-2 rounded-full bg-white px-6 text-lg text-zinc-900">
+                <span style={{ color: BLUE }}>{followerCount}</span>
                 Followers
               </div>
             </div>
 
-            {/* Follow Button */}
             <button
               onClick={handleFollowToggle}
-              className={`text-xs sm:text-sm px-8 py-2.5 rounded-full font-bold shadow-md transition-all active:scale-95 ${
+              className={`h-[46px] rounded-full px-[26px] text-lg font-medium text-black transition-all active:scale-95 ${
                 isFollowing
-                  ? "bg-white text-zinc-900 hover:bg-gray-100"
-                  : "bg-[#c6f800] hover:bg-[#b5e300] text-black"
+                  ? "bg-white hover:bg-zinc-100"
+                  : "hover:brightness-95"
               }`}
+              style={isFollowing ? undefined : { background: LIME }}
             >
               {isFollowing ? "Following" : "Follow"}
             </button>
@@ -195,128 +220,135 @@ export default function CreatorPage() {
         </div>
       </section>
 
-      {/* ========================================================================= */}
-      {/* 2. FILTERS & TOOLBAR                                                     */}
-      {/* ========================================================================= */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-6">
-        {/* Filter Controls Row */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-2.5">
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-              <Filter className="w-3.5 h-3.5 text-gray-500" />
-              <span>Filter</span>
-            </button>
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-              <BarChart2 className="w-3.5 h-3.5 text-gray-500" />
-              <span>Level</span>
-            </button>
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-              <LayoutGrid className="w-3.5 h-3.5 text-gray-500" />
-              <span>Category</span>
+      {/* ===================== 2. TOOLBAR + GRID ===================== */}
+      <section className="w-full px-4 pb-[62px] pt-[62px] sm:px-6 xl:px-0">
+        <div className={WRAP}>
+          {/* Toolbar */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <button className={TOOLBAR_BTN}>
+                <Filter className="h-5 w-5" strokeWidth={2} />
+                Filter
+              </button>
+              <button className={TOOLBAR_BTN}>
+                <BarChart2 className="h-5 w-5" strokeWidth={2.5} />
+                Level
+              </button>
+              <button className={TOOLBAR_BTN}>
+                <Shapes className="h-5 w-5" strokeWidth={1.75} />
+                Category
+              </button>
+            </div>
+
+            <button className={TOOLBAR_BTN}>
+              <AlignLeft className="h-5 w-5" strokeWidth={2} />
+              Most relevant
             </button>
           </div>
 
-          {/* Right Sort Button */}
-          <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-            <ArrowUpDown className="w-3.5 h-3.5 text-gray-500" />
-            <span>Most relevant</span>
-          </button>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* 3. PUBLISHED COURSES GRID                                                */}
-        {/* ========================================================================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-24">
-          {CREATOR_COURSES.map((course) => (
-            <div
-              key={course.id}
-              className="bg-white rounded-2xl border border-gray-200/80 p-3.5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
-            >
-              {/* Thumbnail with overlay badges */}
-              <div className="relative w-full h-48 rounded-xl overflow-hidden mb-4">
-                <Image
-                  src={course.image}
-                  alt={course.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-                {/* Bottom Badges */}
-                <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-[10px] text-white">
-                  <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    {course.lessons} Lessons
-                  </span>
-                  <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    {course.duration}
-                  </span>
-                  <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    {course.comments} Comments
-                  </span>
-                </div>
-              </div>
-
-              {/* Course Info */}
-              <div className="px-1.5 flex-1">
-                <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="font-bold text-sm sm:text-base text-gray-900 tracking-tight line-clamp-1">
-                    {course.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-xs font-semibold text-gray-700 shrink-0">
-                    <span>{course.rating}</span>
-                    <Star className="w-3.5 h-3.5 fill-gray-400 text-gray-400" />
-                  </div>
-                </div>
-
-                <p className="text-xs text-blue-500 font-medium mb-3">
-                  by{" "}
-                  <span className="underline cursor-pointer">
-                    {course.author}
-                  </span>
-                </p>
-
-                {/* Level + Avatars */}
-                <div className="flex items-center justify-between pt-1 pb-3">
-                  <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full text-[11px] font-medium text-gray-600">
-                    <BarChart2 className="w-3 h-3 text-gray-500" />
-                    <span>{course.level}</span>
-                  </div>
-
-                  {/* Student Avatars Stack */}
-                  <div className="flex items-center -space-x-1.5">
-                    <img
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop"
-                      alt=""
+          {/* Course grid */}
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+            {CREATOR_COURSES.map((course) => (
+              <Link
+                key={course.id}
+                href={`/courses/${course.id}`}
+                className="block"
+              >
+                <article
+                  className={`flex flex-col rounded-[18px] border border-[#cfc5c5] bg-white p-[15px] transition-shadow hover:shadow-md ${CARD_SHADOW}`}
+                >
+                  {/* Thumbnail + glass badges */}
+                  <div className="relative h-[197px] w-full overflow-hidden rounded-[14px] xl:aspect-[341/197] xl:h-auto">
+                    <Image
+                      src={course.image}
+                      alt={course.title}
+                      fill
+                      sizes="(min-width: 1280px) 28vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
                     />
-                    <img
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
-                      alt=""
-                    />
-                    <img
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                      src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&h=50&fit=crop"
-                      alt=""
-                    />
-                    <div className="w-5 h-5 rounded-full border border-white bg-[#c6f800] text-black font-bold text-[8px] flex items-center justify-center">
-                      26+
+                    <div className="absolute inset-x-4 bottom-[18px] flex items-center justify-between gap-2 text-[11px] text-zinc-700">
+                      {[
+                        `${course.lessons} Lessons`,
+                        course.duration,
+                        `${course.comments} Comments`,
+                      ].map((label) => (
+                        <span
+                          key={label}
+                          className="inline-flex h-[26px] items-center whitespace-nowrap rounded-full bg-white/60 px-2.5 backdrop-blur-sm"
+                        >
+                          {label}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                </div>
 
-                {/* Price */}
-                <div className="pt-2 border-t border-gray-100 flex items-baseline">
-                  <span className="text-base font-extrabold text-[#0b56fd]">
-                    ${course.price}
-                  </span>
-                  <span className="text-[11px] text-gray-400 font-medium ml-1">
-                    /lifetime
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+                  {/* Title + rating */}
+                  <div className="mt-[15px] flex items-start justify-between gap-3">
+                    <h3
+                      className="truncate text-[20px] font-semibold leading-[28px]"
+                      style={{ color: INK }}
+                    >
+                      {course.title}
+                    </h3>
+                    <div className="flex shrink-0 items-center gap-1 text-[15px] font-medium leading-[28px] text-[#767676]">
+                      <span>{course.rating}</span>
+                      <Star className="h-4 w-4 fill-[#cfd0d3] text-[#cfd0d3]" />
+                    </div>
+                  </div>
+
+                  {/* Author */}
+                  <p className="text-[11px] font-medium leading-[21px] text-[#9c9c9c]">
+                    by{" "}
+                    <span
+                      className="cursor-pointer underline"
+                      style={{ color: BLUE }}
+                    >
+                      {course.author}
+                    </span>
+                  </p>
+
+                  {/* Level pill + avatars */}
+                  <div className="mt-[14px] flex items-center">
+                    <span className="inline-flex h-[30px] items-center gap-1.5 rounded-full border border-[#e6e8ec] bg-white px-2.5 text-[13px] font-medium text-[#4b4d55]">
+                      <BarChart2 className="h-3.5 w-3.5 text-[#6b6e76]" />
+                      {course.level}
+                    </span>
+                    <div className="ml-3 flex items-center">
+                      {AVATARS.map((src, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={i}
+                          src={src}
+                          alt=""
+                          className="h-[30px] w-[30px] flex-none rounded-full border-2 border-white object-cover"
+                          style={{ marginLeft: i === 0 ? 0 : -6 }}
+                        />
+                      ))}
+                      <span
+                        className="-ml-1.5 flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full border-2 border-white text-[10px] font-bold text-black"
+                        style={{ background: LIME }}
+                      >
+                        {course.students}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="mt-4 flex items-baseline leading-[30px]">
+                    <span
+                      className="text-[18px] font-bold"
+                      style={{ color: BLUE }}
+                    >
+                      ${course.price}
+                    </span>
+                    <span className="ml-0.5 text-[11px] text-[#a7a7a7]">
+                      /lifetime
+                    </span>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </div>

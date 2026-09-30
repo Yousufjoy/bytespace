@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   Search,
@@ -15,7 +16,15 @@ import {
   Star,
 } from "lucide-react";
 
-// Filter Tags
+/* ------------------------------ Design tokens ------------------------------ */
+
+const LIME = "#d4fb20"; // brand lime for UI (buttons, pills, badges)
+const BLUE = "#003be2"; // brand blue
+const INK = "#060a1f"; // headings
+const CARD_SHADOW = "shadow-[0_1px_2px_rgba(16,24,40,0.04)]";
+
+/* --------------------------------- Data --------------------------------- */
+
 const CATEGORIES = [
   "Featured",
   "Music",
@@ -28,7 +37,6 @@ const CATEGORIES = [
   "Cooking",
 ];
 
-// Base Course Templates (repeated to generate the 3x6 grid)
 const BASE_COURSES = [
   {
     id: 1,
@@ -115,8 +123,17 @@ const ALL_COURSES = Array.from({ length: 3 }).flatMap((_, cycleIndex) =>
   BASE_COURSES.map((course, idx) => ({
     ...course,
     id: cycleIndex * 6 + idx + 1,
-  }))
+  })),
 );
+
+const AVATARS = [
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&crop=faces",
+  "https://i.pravatar.cc/80?img=47",
+];
+
+/* --------------------------------- Page --------------------------------- */
 
 export default function CoursesPage() {
   const [activeCategory, setActiveCategory] = useState("Featured");
@@ -124,228 +141,234 @@ export default function CoursesPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="w-full bg-white text-zinc-900 min-h-screen">
-      
-      {/* ========================================================================= */}
-      {/* 1. BLUE HEADER HERO BANNER                                               */}
-      {/* ========================================================================= */}
-      <section className="relative w-full bg-[#0b56fd] text-white py-14 sm:py-20 px-6 overflow-hidden">
-        {/* Grid Stripes Background */}
+    <div className="min-h-screen w-full bg-white text-zinc-900">
+      {/* ===================== 1. BLUE HERO ===================== */}
+      <section className="relative w-full overflow-hidden bg-[#003be2] px-6 py-14 text-white sm:py-20">
+        {/* Grid lines: vertical 110px (same as navbar), horizontal 120px */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-20 z-0"
+          className="pointer-events-none absolute inset-0 z-0"
           style={{
             backgroundImage: `
-              linear-gradient(to right, #ffffff 1px, transparent 1px),
-              linear-gradient(to bottom, #ffffff 1px, transparent 1px)
+              linear-gradient(to right, rgba(255,255,255,0.1) 2px, transparent 2px),
+              linear-gradient(to bottom, rgba(255,255,255,0.1) 2px, transparent 2px)
             `,
-            backgroundSize: "64px 64px",
+            backgroundSize: "110px 100%, 100% 120px",
+            backgroundPosition: "0 0, 0 95px",
           }}
         />
 
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-8">
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
+          <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
             Find Your Next Course
           </h1>
 
           {/* Search Bar + Courses Dropdown */}
-          <div className="w-full max-w-xl flex items-center gap-2.5">
-            <div className="relative flex-1 flex items-center">
-              <Search className="absolute left-4 w-4 h-4 text-gray-400" />
+          <div className="flex w-full max-w-xl items-center gap-2.5">
+            <div className="relative flex flex-1 items-center">
+              <Search className="absolute left-4 h-4 w-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-white text-zinc-900 rounded-full text-sm outline-none placeholder:text-gray-400 shadow-md focus:ring-2 focus:ring-[#c6f800]"
+                className="w-full rounded-full bg-white py-3 pl-11 pr-4 text-sm text-zinc-900 shadow-md outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-[#d4fb20]"
               />
             </div>
-            
-            <button className="bg-[#c6f800] hover:bg-[#b5e300] active:scale-95 transition-all text-black font-semibold text-sm px-6 py-3 rounded-full shadow-md flex items-center gap-1.5 shrink-0">
+
+            <button
+              className="flex shrink-0 items-center gap-1.5 rounded-full px-6 py-3 text-sm font-semibold text-black shadow-md transition-all hover:brightness-95 active:scale-95"
+              style={{ background: LIME }}
+            >
               <span>Courses</span>
-              <ChevronDown className="w-4 h-4 text-black" />
+              <ChevronDown className="h-4 w-4 text-black" />
             </button>
           </div>
         </div>
       </section>
 
-      {/* ========================================================================= */}
-      {/* 2. FILTERS & TOOLBAR                                                     */}
-      {/* ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6">
-        
-        {/* Row 1: Filter Buttons Left & Sort Right */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6">
-          <div className="flex items-center gap-2.5">
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-              <Filter className="w-3.5 h-3.5 text-gray-500" />
-              <span>Filter</span>
-            </button>
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-              <BarChart2 className="w-3.5 h-3.5 text-gray-500" />
-              <span>Level</span>
-            </button>
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-              <LayoutGrid className="w-3.5 h-3.5 text-gray-500" />
-              <span>Category</span>
+      {/* ===================== 2. FILTERS + GRID ===================== */}
+      <section className="w-full px-4 pb-6 pt-10 sm:px-6">
+        {/* Same container as the reference card section so the cards match exactly */}
+        <div className="mx-auto w-full xl:w-[83.333%] xl:max-w-[1700px]">
+          {/* Row 1: Filter buttons left, sort right */}
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-6">
+            <div className="flex items-center gap-2.5">
+              <button className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-50">
+                <Filter className="h-3.5 w-3.5 text-gray-500" />
+                <span>Filter</span>
+              </button>
+              <button className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-50">
+                <BarChart2 className="h-3.5 w-3.5 text-gray-500" />
+                <span>Level</span>
+              </button>
+              <button className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-50">
+                <LayoutGrid className="h-3.5 w-3.5 text-gray-500" />
+                <span>Category</span>
+              </button>
+            </div>
+
+            <button className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-50">
+              <ArrowUpDown className="h-3.5 w-3.5 text-gray-500" />
+              <span>Most relevant</span>
             </button>
           </div>
 
-          {/* Right Sort Button */}
-          <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-            <ArrowUpDown className="w-3.5 h-3.5 text-gray-500" />
-            <span>Most relevant</span>
-          </button>
-        </div>
+          {/* Row 2: Category pills */}
+          <div className="flex flex-wrap items-center gap-2 pb-8">
+            {CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`rounded-full px-4 py-2 text-xs font-medium transition-all ${
+                    isActive
+                      ? "font-semibold text-black shadow-sm"
+                      : "bg-[#f1f3f6] text-gray-600 hover:bg-gray-200"
+                  }`}
+                  style={isActive ? { background: LIME } : undefined}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Row 2: Category Pills */}
-        <div className="flex flex-wrap items-center gap-2 pb-8">
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`text-xs px-4 py-2 rounded-full font-medium transition-all ${
-                  isActive
-                    ? "bg-[#c6f800] text-black font-semibold shadow-sm"
-                    : "bg-[#f1f3f6] text-gray-600 hover:bg-gray-200"
-                }`}
+          {/* ================= Courses grid (card copied from reference) ================= */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+            {ALL_COURSES.map((course) => (
+              <Link
+                key={course.id}
+                href={`/courses/${course.id}`}
+                className="block"
               >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ========================================================================= */}
-        {/* 3. COURSES GRID (3 COLUMNS)                                              */}
-        {/* ========================================================================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ALL_COURSES.map((course) => (
-            <div
-              key={course.id}
-              className="bg-white rounded-2xl border border-gray-200/80 p-3.5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
-            >
-              {/* Thumbnail with overlay badges */}
-              <div className="relative w-full h-48 rounded-xl overflow-hidden mb-4">
-                <Image
-                  src={course.image}
-                  alt={course.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-                {/* Bottom Badges */}
-                <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-[10px] text-white">
-                  <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    {course.lessons} Lessons
-                  </span>
-                  <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    {course.duration}
-                  </span>
-                  <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    {course.comments} Comments
-                  </span>
-                </div>
-              </div>
-
-              {/* Course Info */}
-              <div className="px-1.5 flex-1">
-                <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="font-bold text-sm sm:text-base text-gray-900 tracking-tight line-clamp-1">
-                    {course.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-xs font-semibold text-gray-700 shrink-0">
-                    <span>{course.rating}</span>
-                    <Star className="w-3.5 h-3.5 fill-gray-400 text-gray-400" />
-                  </div>
-                </div>
-
-                <p className="text-xs text-blue-500 font-medium mb-3">
-                  by <span className="underline cursor-pointer">{course.author}</span>
-                </p>
-
-                {/* Level + Avatars */}
-                <div className="flex items-center justify-between pt-1 pb-3">
-                  <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full text-[11px] font-medium text-gray-600">
-                    <BarChart2 className="w-3 h-3 text-gray-500" />
-                    <span>{course.level}</span>
-                  </div>
-
-                  {/* Student Avatars Stack */}
-                  <div className="flex items-center -space-x-1.5">
-                    <img
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop"
-                      alt=""
+                <article
+                  className={`flex flex-col rounded-[18px] border border-[#cfc5c5] bg-white p-[15px] transition-shadow hover:shadow-md ${CARD_SHADOW}`}
+                >
+                  {/* Thumbnail + glass badges */}
+                  <div className="relative h-[197px] w-full overflow-hidden rounded-[14px] xl:aspect-[341/197] xl:h-auto">
+                    <Image
+                      src={course.image}
+                      alt={course.title}
+                      fill
+                      sizes="(min-width: 1280px) 28vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
                     />
-                    <img
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
-                      alt=""
-                    />
-                    <img
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                      src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&h=50&fit=crop"
-                      alt=""
-                    />
-                    <div className="w-5 h-5 rounded-full border border-white bg-[#c6f800] text-black font-bold text-[8px] flex items-center justify-center">
-                      26+
+                    <div className="absolute inset-x-4 bottom-[18px] flex items-center justify-between gap-2 text-[11px] text-zinc-700">
+                      {[
+                        `${course.lessons} Lessons`,
+                        course.duration,
+                        `${course.comments} Comments`,
+                      ].map((label) => (
+                        <span
+                          key={label}
+                          className="inline-flex h-[26px] items-center whitespace-nowrap rounded-full bg-white/60 px-2.5 backdrop-blur-sm"
+                        >
+                          {label}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                </div>
 
-                {/* Price */}
-                <div className="pt-2 border-t border-gray-100 flex items-baseline">
-                  <span className="text-base font-extrabold text-[#0b56fd]">
-                    ${course.price}
-                  </span>
-                  <span className="text-[11px] text-gray-400 font-medium ml-1">
-                    /lifetime
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                  {/* Title + rating */}
+                  <div className="mt-[15px] flex items-start justify-between gap-3">
+                    <h3
+                      className="truncate text-[20px] font-semibold leading-[28px]"
+                      style={{ color: INK }}
+                    >
+                      {course.title}
+                    </h3>
+                    <div className="flex shrink-0 items-center gap-1 text-[15px] font-medium leading-[28px] text-[#767676]">
+                      <span>{course.rating}</span>
+                      <Star className="h-4 w-4 fill-[#cfd0d3] text-[#cfd0d3]" />
+                    </div>
+                  </div>
 
-        {/* ========================================================================= */}
-        {/* 4. PAGINATION                                                            */}
-        {/* ========================================================================= */}
-        <div className="flex items-center justify-center gap-3 py-16">
-          {/* Previous Page */}
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+                  {/* Author */}
+                  <p className="text-[11px] font-medium leading-[21px] text-[#9c9c9c]">
+                    by{" "}
+                    <span
+                      className="cursor-pointer underline"
+                      style={{ color: BLUE }}
+                    >
+                      {course.author}
+                    </span>
+                  </p>
 
-          {/* Page Numbers */}
-          {[1, 2, 3, 4, 5].map((page) => (
+                  {/* Level pill + avatars */}
+                  <div className="mt-[14px] flex items-center">
+                    <span className="inline-flex h-[30px] items-center gap-1.5 rounded-full border border-[#e6e8ec] bg-white px-2.5 text-[13px] font-medium text-[#4b4d55]">
+                      <BarChart2 className="h-3.5 w-3.5 text-[#6b6e76]" />
+                      {course.level}
+                    </span>
+                    <div className="ml-3 flex items-center">
+                      {AVATARS.map((src, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={i}
+                          src={src}
+                          alt=""
+                          className="h-[30px] w-[30px] flex-none rounded-full border-2 border-white object-cover"
+                          style={{ marginLeft: i === 0 ? 0 : -6 }}
+                        />
+                      ))}
+                      <span
+                        className="-ml-1.5 flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full border-2 border-white text-[10px] font-bold text-black"
+                        style={{ background: LIME }}
+                      >
+                        2K+
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="mt-4 flex items-baseline leading-[30px]">
+                    <span
+                      className="text-[18px] font-bold"
+                      style={{ color: BLUE }}
+                    >
+                      ${course.price}
+                    </span>
+                    <span className="ml-0.5 text-[11px] text-[#a7a7a7]">
+                      /lifetime
+                    </span>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+
+          {/* ===================== 3. PAGINATION ===================== */}
+          <div className="flex items-center justify-center gap-3 py-16">
             <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`w-9 h-9 rounded-full text-xs font-semibold transition ${
-                currentPage === page
-                  ? "text-black font-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:bg-gray-100"
             >
-              {page}
+              <ChevronLeft className="h-4 w-4" />
             </button>
-          ))}
 
-          {/* Next Page */}
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(5, p + 1))}
-            className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+            {[1, 2, 3, 4, 5].map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`h-9 w-9 rounded-full text-xs font-semibold transition ${
+                  currentPage === page
+                    ? "font-black text-black"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(5, p + 1))}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:bg-gray-100"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
-
       </section>
     </div>
   );

@@ -3,20 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
 
-/**
- * Full-width navbar
- * - Background spans the entire viewport
- * - Content uses almost the full available width
- * - Larger navigation typography
- * - More spacing between nav items
- */
-
 const NAV_BG: React.CSSProperties = {
   backgroundColor: "#003be2",
   backgroundImage:
     "linear-gradient(to right, rgba(255,255,255,0.12) 2px, transparent 2px), linear-gradient(to bottom, rgba(255,255,255,0.12) 2px, transparent 2px)",
-  backgroundSize:
-    "max(min(8.3333vw, 110px), 60px) max(min(8.3333vw, 110px), 60px)",
+  backgroundSize: "max(min(8.3333vw,110px),60px) max(min(8.3333vw,110px),60px)",
 };
 
 export default function Navbar() {
@@ -25,10 +16,9 @@ export default function Navbar() {
       className="relative z-50 h-[72px] w-full text-white md:h-[min(8.3333vw,110px)]"
       style={NAV_BG}
     >
-      <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between px-6 sm:px-8 md:grid md:grid-cols-[1fr_auto_1fr] md:px-10 lg:px-14 xl:px-16">
-        {/* ================================================================ */}
+      {/* Same width rule as the page content: 83.333% of the viewport (1200px at 1440px), max 1700px */}
+      <div className="mx-auto flex h-full w-full items-center justify-between px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] xl:w-[83.333%] xl:max-w-[1700px] xl:px-0">
         {/* LOGO */}
-        {/* ================================================================ */}
         <Link href="/" className="block justify-self-start">
           <Image
             src="/Header_Logo.png"
@@ -40,9 +30,7 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* ================================================================ */}
         {/* CENTER NAVIGATION */}
-        {/* ================================================================ */}
         <nav className="hidden items-center md:flex md:gap-[clamp(32px,3.5vw,56px)]">
           <Link
             href="/"
@@ -53,26 +41,24 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="#courses"
+            href="/courses"
             className="text-[16px] font-medium text-white/90 transition-colors hover:text-white lg:text-[18px]"
           >
             Courses
           </Link>
 
           <Link
-            href="#creators"
+            href="/coursemaker"
             className="text-[16px] font-medium text-white/90 transition-colors hover:text-white lg:text-[18px]"
           >
             Creators
           </Link>
         </nav>
 
-        {/* ================================================================ */}
         {/* RIGHT ACTIONS */}
-        {/* ================================================================ */}
         <div className="flex items-center gap-6 justify-self-end md:gap-[clamp(24px,2.5vw,40px)]">
           <Link
-            href="/signin"
+            href="/login"
             className="text-[16px] font-medium transition-colors hover:text-[#cbfc01] lg:text-[18px]"
           >
             Sign In

@@ -80,7 +80,7 @@ export default function CourseCard({
         {/* Author */}
         <p className="text-[11px] font-medium leading-[21px] text-[#9c9c9c]">
           by{" "}
-          <span className="cursor-pointer underline" style={{ color: BLUE }}>
+          <span className="cursor-pointer" style={{ color: BLUE }}>
             {course.author}
           </span>
         </p>
